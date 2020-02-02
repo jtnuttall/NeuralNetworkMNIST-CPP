@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jeremy/csci360/Project 1/Code/task2/SimpleFeedForwardNetwork.cpp
+SimpleFeedForwardNetwork.h
+/home/jeremy/csci360/Project 1/Code/task2/SimpleFeedForwardNetwork.h
+iostream
+-
+random
+-
+iomanip
+-
+
+/home/jeremy/csci360/Project 1/Code/task2/SimpleFeedForwardNetwork.h
+math.h
+-
+vector
+-
+
+/home/jeremy/csci360/Project 1/Code/task2/main.cpp
+vector
+-
+iostream
+-
+SimpleFeedForwardNetwork.h
+/home/jeremy/csci360/Project 1/Code/task2/SimpleFeedForwardNetwork.h
+
