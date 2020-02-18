@@ -1,0 +1,383 @@
+\hypertarget{class_neural_network}{}\doxysection{Neural\+Network Class Reference}
+\label{class_neural_network}\index{NeuralNetwork@{NeuralNetwork}}
+
+
+A neural network.  
+
+
+
+
+{\ttfamily \#include $<$Neural\+Network.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_neural_network_1_1_node}{Node}}
+\begin{DoxyCompactList}\small\item\em A Single node in the neural network. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_neural_network_a2346bd7f758c6330819ea23eb608c4f7}\label{class_neural_network_a2346bd7f758c6330819ea23eb608c4f7}} 
+typedef vector$<$ \mbox{\hyperlink{struct_neural_network_1_1_node}{Node}} $>$ {\bfseries Layer}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_neural_network_abc66ebe27030421c55233a72dabc7096}{Neural\+Network}} (int n\+Inputs, int n\+Hidden\+Layers, int hidden\+Layer\+Size, int n\+Outputs)
+\begin{DoxyCompactList}\small\item\em Constructs a new neural network. Must call \mbox{\hyperlink{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}{initialize}} before running. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}{initialize}} (double alpha, unsigned seed, const vector$<$ vector$<$ double $>$$>$ \&example\+Inputs, const vector$<$ double $>$ \&example\+Outputs, const vector$<$ vector$<$ double $>$$>$ \&validation\+Inputs, const vector$<$ double $>$ \&validation\+Outputs, unsigned epochs, bool should\+Init\+Weights=true)
+\begin{DoxyCompactList}\small\item\em Initialize the neural network with the given values. May be called with the testing sets as the validation arguments and followed by \mbox{\hyperlink{class_neural_network_aea8bf43510521389f7b8aeffa2e16c40}{validate()}} to test the network. Be sure to pass {\ttfamily should\+Init\+Weights} as false in this case. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_neural_network_ac48e431f3852df69ff492ccdc25c3992}{train\+And\+Validate}} (int precision=3)
+\begin{DoxyCompactList}\small\item\em Train the function over the training inputs and validate on each epoch. Prints the prediction accuracy and loss for both the training set and the validation set on each epoch. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a73df19ff71997aacd5bb8dc1b24b6790}\label{class_neural_network_a73df19ff71997aacd5bb8dc1b24b6790}} 
+void \mbox{\hyperlink{class_neural_network_a73df19ff71997aacd5bb8dc1b24b6790}{train}} ()
+\begin{DoxyCompactList}\small\item\em Train the network over the given training inputs. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_aea8bf43510521389f7b8aeffa2e16c40}\label{class_neural_network_aea8bf43510521389f7b8aeffa2e16c40}} 
+void \mbox{\hyperlink{class_neural_network_aea8bf43510521389f7b8aeffa2e16c40}{validate}} ()
+\begin{DoxyCompactList}\small\item\em Validate the network. Should be called after training. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_neural_network_ad83c74b96f69a64bd6d3af000a45f57a}{show\+Training\+Result}} (int precision=3)
+\begin{DoxyCompactList}\small\item\em Shows the training result. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_neural_network_aefdb38fb64aaed9b742036f051b901af}{show\+Validation\+Result}} (int precision=3)
+\begin{DoxyCompactList}\small\item\em Shows the validation result. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_neural_network_aca711eb338b45a8d56276f03c117b385}\label{class_neural_network_aca711eb338b45a8d56276f03c117b385}} 
+void \mbox{\hyperlink{class_neural_network_aca711eb338b45a8d56276f03c117b385}{train\+Single\+Epoch}} ()
+\begin{DoxyCompactList}\small\item\em Do training one time for all training examples. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_neural_network_a6b3b4eb9a79e518ae3cffd1528b7919d}{print\+Output}} (int precision=3)
+\begin{DoxyCompactList}\small\item\em Print output layer. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_neural_network_a37ef0eb33c2fffa7b27cc5bc2a6bb7b3}{y}} (int i)
+\begin{DoxyCompactList}\small\item\em Expected value of output i. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_ae6108440a5f30bd365b2bea65fd96861}\label{class_neural_network_ae6108440a5f30bd365b2bea65fd96861}} 
+Layer \& {\bfseries input\+Layer} ()
+\item 
+\mbox{\Hypertarget{class_neural_network_a366f2ed7e6cd9b5999223b25ecd6fbb0}\label{class_neural_network_a366f2ed7e6cd9b5999223b25ecd6fbb0}} 
+vector$<$ Layer $>$\+::iterator {\bfseries hidden\+Layer\+Begin} ()
+\item 
+\mbox{\Hypertarget{class_neural_network_aeef7cb6ea2efbe111cd864734bb0d066}\label{class_neural_network_aeef7cb6ea2efbe111cd864734bb0d066}} 
+vector$<$ Layer $>$\+::iterator {\bfseries hidden\+Layer\+End} ()
+\item 
+\mbox{\Hypertarget{class_neural_network_ab1f4c7719db72436049a00534ac23360}\label{class_neural_network_ab1f4c7719db72436049a00534ac23360}} 
+Layer \& {\bfseries output\+Layer} ()
+\item 
+double \mbox{\hyperlink{class_neural_network_a510f2198df5ad6dd208a45e17e615420}{rand\+Weight}} ()
+\begin{DoxyCompactList}\small\item\em Calculate a random nonzero weight using \#generator and \#distribution, which has been seeded by \mbox{\hyperlink{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}{initialize}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a6ea041b895ae869eadadfa1ab0d22338}\label{class_neural_network_a6ea041b895ae869eadadfa1ab0d22338}} 
+void \mbox{\hyperlink{class_neural_network_a6ea041b895ae869eadadfa1ab0d22338}{init\+Weights}} ()
+\begin{DoxyCompactList}\small\item\em Initialize every weight in the network to the value returned by \mbox{\hyperlink{class_neural_network_a510f2198df5ad6dd208a45e17e615420}{rand\+Weight()}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a7541286a402cb22aa0074f90d92273bc}\label{class_neural_network_a7541286a402cb22aa0074f90d92273bc}} 
+void \mbox{\hyperlink{class_neural_network_a7541286a402cb22aa0074f90d92273bc}{forward\+Propagate}} ()
+\begin{DoxyCompactList}\small\item\em Perform forward propagation on the network. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_ab13faf2fe3e12165d5de2be1df041e91}\label{class_neural_network_ab13faf2fe3e12165d5de2be1df041e91}} 
+void \mbox{\hyperlink{class_neural_network_ab13faf2fe3e12165d5de2be1df041e91}{backward\+Propagate}} ()
+\begin{DoxyCompactList}\small\item\em Perform backward propagation on the network. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a136ab1f732461a3e969e64b051c3b0bc}\label{class_neural_network_a136ab1f732461a3e969e64b051c3b0bc}} 
+void \mbox{\hyperlink{class_neural_network_a136ab1f732461a3e969e64b051c3b0bc}{update\+Weights}} ()
+\begin{DoxyCompactList}\small\item\em Update every weight in the network using the calculated errors. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_neural_network_a2d17383bbce71f45de3d4be2a46be905}{get\+Predicted\+Label}} ()
+\begin{DoxyCompactList}\small\item\em Gets the label predicted by the output node(s). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a1e0abf769726be749af0a5a4e1a8ea84}\label{class_neural_network_a1e0abf769726be749af0a5a4e1a8ea84}} 
+void \mbox{\hyperlink{class_neural_network_a1e0abf769726be749af0a5a4e1a8ea84}{calc\+Totals}} ()
+\begin{DoxyCompactList}\small\item\em Calculates the total accuracy and loss. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{class_neural_network_a27600cd0e07b24be634cb1e8c9b09695}{get\+Loss}} ()
+\begin{DoxyCompactList}\small\item\em Calculates the loss. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{class_neural_network_a991d22b9c845195aecf218012837d274}{g}} (double x)
+\begin{DoxyCompactList}\small\item\em The activation function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_neural_network_a0a215e9ef65a8d7203eebb9aa060d1ea}\label{class_neural_network_a0a215e9ef65a8d7203eebb9aa060d1ea}} 
+static double {\bfseries gprime} (double \mbox{\hyperlink{class_neural_network_a37ef0eb33c2fffa7b27cc5bc2a6bb7b3}{y}})
+\item 
+static double \mbox{\hyperlink{class_neural_network_a44f2e969e51fa0ea4432b23d85b25cd1}{in}} (vector$<$ Layer $>$\+::iterator curr\+Layer\+Iterator, const \mbox{\hyperlink{struct_neural_network_1_1_node}{Node}} \&curr\+Layer\+Node)
+\begin{DoxyCompactList}\small\item\em Calculate the input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_neural_network_a13e5b3e5de99d6402cd503eb340a96ce}\label{class_neural_network_a13e5b3e5de99d6402cd503eb340a96ce}} 
+double {\bfseries alpha}
+\item 
+\mbox{\Hypertarget{class_neural_network_a2abfbfe55de49b4fb82c4bf2bdc6b0ff}\label{class_neural_network_a2abfbfe55de49b4fb82c4bf2bdc6b0ff}} 
+unsigned {\bfseries epochs}
+\item 
+\mbox{\Hypertarget{class_neural_network_a693d3b8529ea848beff94bdb55d8e8ef}\label{class_neural_network_a693d3b8529ea848beff94bdb55d8e8ef}} 
+unsigned {\bfseries current\+Epoch}
+\item 
+\mbox{\Hypertarget{class_neural_network_a114cd690cac17782e492920d0420af2f}\label{class_neural_network_a114cd690cac17782e492920d0420af2f}} 
+vector$<$ Layer $>$ {\bfseries network}
+\item 
+\mbox{\Hypertarget{class_neural_network_a8bb0b2cc69a396878d37c7a709c64ff3}\label{class_neural_network_a8bb0b2cc69a396878d37c7a709c64ff3}} 
+const vector$<$ double $>$ $\ast$ {\bfseries current\+Input}
+\item 
+\mbox{\Hypertarget{class_neural_network_a9d672d4b0626205014f4b96e3618ec2f}\label{class_neural_network_a9d672d4b0626205014f4b96e3618ec2f}} 
+const double $\ast$ {\bfseries current\+Output}
+\item 
+\mbox{\Hypertarget{class_neural_network_a728548f37d78a56ada246c8aa629ad90}\label{class_neural_network_a728548f37d78a56ada246c8aa629ad90}} 
+vector$<$ vector$<$ double $>$ $>$ {\bfseries example\+Inputs}
+\item 
+\mbox{\Hypertarget{class_neural_network_a0f46deca2baa707f3a2c23e2d53150cb}\label{class_neural_network_a0f46deca2baa707f3a2c23e2d53150cb}} 
+vector$<$ double $>$ {\bfseries example\+Outputs}
+\item 
+\mbox{\Hypertarget{class_neural_network_af1d6c9aca15234a7a880507631e2e4b5}\label{class_neural_network_af1d6c9aca15234a7a880507631e2e4b5}} 
+vector$<$ vector$<$ double $>$ $>$ {\bfseries validation\+Inputs}
+\item 
+\mbox{\Hypertarget{class_neural_network_a547dff439f3cca5bf7d08c7b2ab43797}\label{class_neural_network_a547dff439f3cca5bf7d08c7b2ab43797}} 
+vector$<$ double $>$ {\bfseries validation\+Outputs}
+\item 
+\mbox{\Hypertarget{class_neural_network_a6851529bf7184963d8b694187cd52941}\label{class_neural_network_a6851529bf7184963d8b694187cd52941}} 
+mt19937 {\bfseries generator}
+\item 
+\mbox{\Hypertarget{class_neural_network_ae40945e730d85933c4e697aa57d4f041}\label{class_neural_network_ae40945e730d85933c4e697aa57d4f041}} 
+uniform\+\_\+real\+\_\+distribution$<$ double $>$ {\bfseries distribution}
+\item 
+\mbox{\Hypertarget{class_neural_network_a86c5fe45f076bab943e3881256d28a77}\label{class_neural_network_a86c5fe45f076bab943e3881256d28a77}} 
+unsigned {\bfseries total\+Train\+Samples}
+\item 
+\mbox{\Hypertarget{class_neural_network_a97e12874f061e9758c899e750b8bf077}\label{class_neural_network_a97e12874f061e9758c899e750b8bf077}} 
+unsigned {\bfseries total\+Correct\+Train\+Samples}
+\item 
+\mbox{\Hypertarget{class_neural_network_adeb4d77617e96640893873c755bfc877}\label{class_neural_network_adeb4d77617e96640893873c755bfc877}} 
+double {\bfseries total\+Train\+Loss}
+\item 
+\mbox{\Hypertarget{class_neural_network_a854d422d20b8d55bcf541e195b8cb6c3}\label{class_neural_network_a854d422d20b8d55bcf541e195b8cb6c3}} 
+unsigned {\bfseries total\+Val\+Samples}
+\item 
+\mbox{\Hypertarget{class_neural_network_a0de2e09a4d58fd3c5d0332958b1a6d5b}\label{class_neural_network_a0de2e09a4d58fd3c5d0332958b1a6d5b}} 
+unsigned {\bfseries total\+Correct\+Val\+Samples}
+\item 
+\mbox{\Hypertarget{class_neural_network_a2368e47d6080e93ac6664ad540c9f5fc}\label{class_neural_network_a2368e47d6080e93ac6664ad540c9f5fc}} 
+double {\bfseries total\+Val\+Loss}
+\item 
+\mbox{\Hypertarget{class_neural_network_a3be4313f1190027ca2635088003e9c2d}\label{class_neural_network_a3be4313f1190027ca2635088003e9c2d}} 
+double {\bfseries train\+Accuracy}
+\item 
+\mbox{\Hypertarget{class_neural_network_a2b0fb6c06323f5f57c866b5d4be3dcbe}\label{class_neural_network_a2b0fb6c06323f5f57c866b5d4be3dcbe}} 
+double {\bfseries train\+Loss}
+\item 
+\mbox{\Hypertarget{class_neural_network_a966e96bb85e6022f13455d1841ca9dc7}\label{class_neural_network_a966e96bb85e6022f13455d1841ca9dc7}} 
+double {\bfseries val\+Accuracy}
+\item 
+\mbox{\Hypertarget{class_neural_network_a42e62fdee2f29ee3b55ed7ef108823c9}\label{class_neural_network_a42e62fdee2f29ee3b55ed7ef108823c9}} 
+double {\bfseries val\+Loss}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A neural network. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_neural_network_abc66ebe27030421c55233a72dabc7096}\label{class_neural_network_abc66ebe27030421c55233a72dabc7096}} 
+\index{NeuralNetwork@{NeuralNetwork}!NeuralNetwork@{NeuralNetwork}}
+\index{NeuralNetwork@{NeuralNetwork}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{NeuralNetwork()}{NeuralNetwork()}}
+{\footnotesize\ttfamily Neural\+Network\+::\+Neural\+Network (\begin{DoxyParamCaption}\item[{int}]{n\+Inputs,  }\item[{int}]{n\+Hidden\+Layers,  }\item[{int}]{hidden\+Layer\+Size,  }\item[{int}]{n\+Outputs }\end{DoxyParamCaption})}
+
+
+
+Constructs a new neural network. Must call \mbox{\hyperlink{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}{initialize}} before running. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em n\+Inputs} & The number of inputs \\
+\hline
+\mbox{\texttt{ in}}  & {\em n\+Hidden\+Layers} & The number of hidden layers \\
+\hline
+\mbox{\texttt{ in}}  & {\em hidden\+Layer\+Size} & The number of nodes in each hidden layer \\
+\hline
+\mbox{\texttt{ in}}  & {\em n\+Outputs} & The number of outputs \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_neural_network_a991d22b9c845195aecf218012837d274}\label{class_neural_network_a991d22b9c845195aecf218012837d274}} 
+\index{NeuralNetwork@{NeuralNetwork}!g@{g}}
+\index{g@{g}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{g()}{g()}}
+{\footnotesize\ttfamily double Neural\+Network\+::g (\begin{DoxyParamCaption}\item[{double}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The activation function. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em x} & Input\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Activation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neural_network_a27600cd0e07b24be634cb1e8c9b09695}\label{class_neural_network_a27600cd0e07b24be634cb1e8c9b09695}} 
+\index{NeuralNetwork@{NeuralNetwork}!getLoss@{getLoss}}
+\index{getLoss@{getLoss}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{getLoss()}{getLoss()}}
+{\footnotesize\ttfamily double Neural\+Network\+::get\+Loss (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Calculates the loss. 
+
+\begin{DoxyReturn}{Returns}
+The loss. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neural_network_a2d17383bbce71f45de3d4be2a46be905}\label{class_neural_network_a2d17383bbce71f45de3d4be2a46be905}} 
+\index{NeuralNetwork@{NeuralNetwork}!getPredictedLabel@{getPredictedLabel}}
+\index{getPredictedLabel@{getPredictedLabel}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{getPredictedLabel()}{getPredictedLabel()}}
+{\footnotesize\ttfamily int Neural\+Network\+::get\+Predicted\+Label (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Gets the label predicted by the output node(s). 
+
+\begin{DoxyReturn}{Returns}
+The predicted label. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neural_network_a44f2e969e51fa0ea4432b23d85b25cd1}\label{class_neural_network_a44f2e969e51fa0ea4432b23d85b25cd1}} 
+\index{NeuralNetwork@{NeuralNetwork}!in@{in}}
+\index{in@{in}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{in()}{in()}}
+{\footnotesize\ttfamily double Neural\+Network\+::in (\begin{DoxyParamCaption}\item[{vector$<$ Layer $>$\+::iterator}]{curr\+Layer\+Iterator,  }\item[{const \mbox{\hyperlink{struct_neural_network_1_1_node}{Node}} \&}]{curr\+Layer\+Node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Calculate the input. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em layer\+Iterator} & Iterator to the current layer \\
+\hline
+\mbox{\texttt{ in}}  & {\em curr\+Layer\+Node} & The current node in the layer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The weighted input for curr\+Layer\+Node 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}\label{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}} 
+\index{NeuralNetwork@{NeuralNetwork}!initialize@{initialize}}
+\index{initialize@{initialize}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily void Neural\+Network\+::initialize (\begin{DoxyParamCaption}\item[{double}]{alpha,  }\item[{unsigned}]{seed,  }\item[{const vector$<$ vector$<$ double $>$$>$ \&}]{example\+Inputs,  }\item[{const vector$<$ double $>$ \&}]{example\+Outputs,  }\item[{const vector$<$ vector$<$ double $>$$>$ \&}]{validation\+Inputs,  }\item[{const vector$<$ double $>$ \&}]{validation\+Outputs,  }\item[{unsigned}]{epochs,  }\item[{bool}]{should\+Init\+Weights = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Initialize the neural network with the given values. May be called with the testing sets as the validation arguments and followed by \mbox{\hyperlink{class_neural_network_aea8bf43510521389f7b8aeffa2e16c40}{validate()}} to test the network. Be sure to pass {\ttfamily should\+Init\+Weights} as false in this case. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em alpha} & The learning rate \\
+\hline
+\mbox{\texttt{ in}}  & {\em seed} & The seed for initializing the weights \\
+\hline
+\mbox{\texttt{ in}}  & {\em example\+Inputs} & The training inputs \\
+\hline
+\mbox{\texttt{ in}}  & {\em example\+Outputs} & The training outputs \\
+\hline
+\mbox{\texttt{ in}}  & {\em validation\+Inputs} & The validation inputs \\
+\hline
+\mbox{\texttt{ in}}  & {\em validation\+Outputs} & The validation outputs \\
+\hline
+\mbox{\texttt{ in}}  & {\em epochs} & The number of training epochs \\
+\hline
+\mbox{\texttt{ in}}  & {\em should\+Init\+Weights} & Should we initialize weights to random values? \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neural_network_a6b3b4eb9a79e518ae3cffd1528b7919d}\label{class_neural_network_a6b3b4eb9a79e518ae3cffd1528b7919d}} 
+\index{NeuralNetwork@{NeuralNetwork}!printOutput@{printOutput}}
+\index{printOutput@{printOutput}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{printOutput()}{printOutput()}}
+{\footnotesize\ttfamily void Neural\+Network\+::print\+Output (\begin{DoxyParamCaption}\item[{int}]{precision = {\ttfamily 3} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Print output layer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em precision} & The precision for printing the floating point values. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neural_network_a510f2198df5ad6dd208a45e17e615420}\label{class_neural_network_a510f2198df5ad6dd208a45e17e615420}} 
+\index{NeuralNetwork@{NeuralNetwork}!randWeight@{randWeight}}
+\index{randWeight@{randWeight}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{randWeight()}{randWeight()}}
+{\footnotesize\ttfamily double Neural\+Network\+::rand\+Weight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Calculate a random nonzero weight using \#generator and \#distribution, which has been seeded by \mbox{\hyperlink{class_neural_network_a99a0b90079397caee83a5cfb9f24a8c5}{initialize}}. 
+
+\begin{DoxyReturn}{Returns}
+A random weight in the range given by \#distribution. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neural_network_ad83c74b96f69a64bd6d3af000a45f57a}\label{class_neural_network_ad83c74b96f69a64bd6d3af000a45f57a}} 
+\index{NeuralNetwork@{NeuralNetwork}!showTrainingResult@{showTrainingResult}}
+\index{showTrainingResult@{showTrainingResult}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{showTrainingResult()}{showTrainingResult()}}
+{\footnotesize\ttfamily void Neural\+Network\+::show\+Training\+Result (\begin{DoxyParamCaption}\item[{int}]{precision = {\ttfamily 3} }\end{DoxyParamCaption})}
+
+
+
+Shows the training result. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em precision} & The precision for printing the floating point values. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neural_network_aefdb38fb64aaed9b742036f051b901af}\label{class_neural_network_aefdb38fb64aaed9b742036f051b901af}} 
+\index{NeuralNetwork@{NeuralNetwork}!showValidationResult@{showValidationResult}}
+\index{showValidationResult@{showValidationResult}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{showValidationResult()}{showValidationResult()}}
+{\footnotesize\ttfamily void Neural\+Network\+::show\+Validation\+Result (\begin{DoxyParamCaption}\item[{int}]{precision = {\ttfamily 3} }\end{DoxyParamCaption})}
+
+
+
+Shows the validation result. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em precision} & The precision for printing the floating point values. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neural_network_ac48e431f3852df69ff492ccdc25c3992}\label{class_neural_network_ac48e431f3852df69ff492ccdc25c3992}} 
+\index{NeuralNetwork@{NeuralNetwork}!trainAndValidate@{trainAndValidate}}
+\index{trainAndValidate@{trainAndValidate}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{trainAndValidate()}{trainAndValidate()}}
+{\footnotesize\ttfamily void Neural\+Network\+::train\+And\+Validate (\begin{DoxyParamCaption}\item[{int}]{precision = {\ttfamily 3} }\end{DoxyParamCaption})}
+
+
+
+Train the function over the training inputs and validate on each epoch. Prints the prediction accuracy and loss for both the training set and the validation set on each epoch. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em precision} & The precision for printing the floating point values. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neural_network_a37ef0eb33c2fffa7b27cc5bc2a6bb7b3}\label{class_neural_network_a37ef0eb33c2fffa7b27cc5bc2a6bb7b3}} 
+\index{NeuralNetwork@{NeuralNetwork}!y@{y}}
+\index{y@{y}!NeuralNetwork@{NeuralNetwork}}
+\doxysubsubsection{\texorpdfstring{y()}{y()}}
+{\footnotesize\ttfamily double Neural\+Network\+::y (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Expected value of output i. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em i} & Output i\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Expected value 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Neural\+Network.\+h\item 
+Neural\+Network.\+cpp\end{DoxyCompactItemize}

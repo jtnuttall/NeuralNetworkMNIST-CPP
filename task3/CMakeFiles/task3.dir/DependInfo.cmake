@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/NeuralNetwork.cpp" "/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/CMakeFiles/task3.dir/NeuralNetwork.cpp.o"
-  "/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/main.cpp" "/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/CMakeFiles/task3.dir/main.cpp.o"
+  "/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/NeuralNetwork.cpp" "/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/CMakeFiles/task3.dir/NeuralNetwork.cpp.o"
+  "/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/main.cpp" "/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/CMakeFiles/task3.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "Clang")
 

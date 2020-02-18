@@ -1,6 +1,6 @@
 #include <vector>
 #include <iostream>
-#include <ctime>
+#include <chrono>
 #include <algorithm>
 #include "util.h"
 #include "NeuralNetwork.h"
@@ -15,7 +15,7 @@
 
 /* How many outputs? If one, make sure to set ONE_OUTPUT to 1 in 
  * NeuralNetwork.cpp. */
-#define NUM_OUTPUTS 10
+#define NUM_OUTPUTS 1
 
 /* Example slicing constants */
 #define NUM_EXAMPLES 6000
@@ -23,32 +23,22 @@
 #define NUM_VALIDATION (int) ( (1.0/3.0) * NUM_EXAMPLES )
 
 /* Hyperparameters */
-// #define HIDDEN_LAYERS 3
-// #define HIDDEN_LAYER_SIZE 32
-// #define ALPHA 8e-3
-// #define SEED 1570649057
-// #define EPOCHS 508
-
-// 1 output
-// #define HIDDEN_LAYERS 3
-// #define HIDDEN_LAYER_SIZE 32
-// #define ALPHA 1e-1
-// #define SEED 1570649057
-// #define EPOCHS 1034
-
-// tanh
 #define HIDDEN_LAYERS 3
 #define HIDDEN_LAYER_SIZE 32
-#define ALPHA 2e-4
-#define SEED 1570675491
-#define EPOCHS 1700
+#define ALPHA 8e-3
+#define SEED rd()
+#define EPOCHS 700
 
-typedef double Out;
+#define PRECISION 4
+
+using Out = double;
 
 using namespace std;
 
 int main()
 {
+	cout << fixed;
+
 	string filename = "../MNIST/train-images.idx3-ubyte";
 	//load MNIST images
 	vector <vector< int> > training_images;
@@ -82,7 +72,8 @@ int main()
 		 << "num training labels: " << training_label_slice.size() << endl
 		 << "num validation labels: " << validation_label_slice.size() << endl;
 
-	time_t seed = SEED;
+	random_device rd;
+	unsigned seed = SEED;
 	cout << "seed: " << seed << endl;
 
 	// initialize, train, and validate neural network
@@ -100,7 +91,7 @@ int main()
 	/* trainAndValidate prints the training accuracy, training loss, validation
 	 * accuracy, and validation loss at each epoch.
 	 */
-	nn.trainAndValidate();
+	nn.trainAndValidate(PRECISION);
 #else
 	/* Given the determined hyperparameters and seed, use this to validate
 	 * them
@@ -110,7 +101,7 @@ int main()
 	nn.showTrainingResult();
 	nn.validate();
 	cout << "validation (epoch " << EPOCHS << "): " <<endl;
-	nn.showValidationResult();
+	nn.showValidationResult(PRECISION);
 
 
 	/* testing */
@@ -139,7 +130,7 @@ int main()
 
 	nn.validate();
 	cout << "Testing result: " << endl;
-	nn.showValidationResult();
+	nn.showValidationResult(PRECISION);
 #endif
 
 	return 0;

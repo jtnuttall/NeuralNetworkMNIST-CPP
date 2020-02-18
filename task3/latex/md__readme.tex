@@ -1,0 +1,72 @@
+\hypertarget{md__readme_autotoc_md1}{}\doxysection{Build Environment Information}\label{md__readme_autotoc_md1}
+\hypertarget{md__readme_autotoc_md2}{}\doxysubsection{OS}\label{md__readme_autotoc_md2}
+System Version\+: mac\+OS 10.\+14 (18A391) Kernel Version\+: Darwin 18.\+0.\+0 Processor Name\+: Intel Core i7 Processor Speed\+: 2.\+9 G\+Hz\hypertarget{md__readme_autotoc_md3}{}\doxysubsection{C++ Compiler}\label{md__readme_autotoc_md3}
+Apple L\+L\+VM version 10.\+0.\+1 (clang-\/1001.\+0.\+46.\+4) Target\+: x86\+\_\+64-\/apple-\/darwin18.\+0.\+0 Thread model\+: posix
+
+Note\+: {\ttfamily clang} is aliased as {\ttfamily gcc} and {\ttfamily g++} by default on Macs with the X\+Code toolchain installed, so this is the output of {\ttfamily g++ -\/-\/version}. However, as long as the {\ttfamily -\/-\/std=c++0x} flag is set, the code should compile fine with G\+NU {\ttfamily g++}.\hypertarget{md__readme_autotoc_md4}{}\doxysubsection{Flags}\label{md__readme_autotoc_md4}
+Aside from the given flags {\ttfamily -\/g}, {\ttfamily -\/Wall}, and {\ttfamily -\/-\/std=c++0x}, I have added {\ttfamily -\/Wpedantic} and {\ttfamily -\/O3}. Rationale\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily -\/Wpedantic}\+: Warns on forbidden extensions and for certain extra potential error cases.
+\item {\ttfamily -\/O3}\+: Produces a signifcant performance gain. If removed, the program will still run, but I strongly suggest you leave it in. The high level solution is reducible to matrix math, so {\ttfamily -\/O3} reduces it to this. Without it, it will perform a whole lot of extra operations specified by the {\ttfamily C++11} features I have used.
+\end{DoxyItemize}\hypertarget{md__readme_autotoc_md5}{}\doxysection{Hyperperameters for Accuracy $>$ 0.\+9}\label{md__readme_autotoc_md5}
+Hyperperameters are {\ttfamily \#define}d at the top of {\ttfamily main.\+cpp}.
+
+For random weights, {\ttfamily \#define S\+E\+ED time(\+N\+U\+L\+L)} will work as expected.\hypertarget{md__readme_autotoc_md6}{}\doxysubsection{Testing Accuracy\+: $<$tt$>$0.\+912$<$/tt$>$}\label{md__readme_autotoc_md6}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define HIDDEN\_LAYERS 3}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define HIDDEN\_LAYER\_SIZE 32}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define ALPHA 8e-\/3}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define SEED 1570649057}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define EPOCHS 508}}
+\end{DoxyCode}
+ \hypertarget{md__readme_autotoc_md7}{}\doxysubsubsection{Time taken}\label{md__readme_autotoc_md7}
+Rewrite {\ttfamily main}\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{main () \{}
+\DoxyCodeLine{    \{ load MNIST \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \mbox{\hyperlink{class_neural_network}{NeuralNetwork}} nn(training\_images[0].size(), HIDDEN\_LAYERS, HIDDEN\_LAYER\_SIZE, 10);}
+\DoxyCodeLine{    nn.initialize}
+\DoxyCodeLine{        ( ALPHA}
+\DoxyCodeLine{        , seed}
+\DoxyCodeLine{        , training\_image\_slice \textcolor{comment}{// training images}}
+\DoxyCodeLine{        , training\_label\_slice \textcolor{comment}{// training labels}}
+\DoxyCodeLine{        , validation\_image\_slice \textcolor{comment}{// validation images}}
+\DoxyCodeLine{        , validation\_label\_slice \textcolor{comment}{// validation labels}}
+\DoxyCodeLine{        , EPOCHS );}
+\DoxyCodeLine{}
+\DoxyCodeLine{    nn.train();}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+\end{DoxyCode}
+
+
+Then\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\$ time ./task3}
+\DoxyCodeLine{./task3  184.42s user 0.88s system 99\% cpu 3:06.21 total}
+\DoxyCodeLine{>>> elapsed time 3m6s}
+\end{DoxyCode}
+\hypertarget{md__readme_autotoc_md8}{}\doxysection{Using one output}\label{md__readme_autotoc_md8}
+Two simple changes\+:
+\begin{DoxyEnumerate}
+\item Go to the top of {\ttfamily main.\+cpp} and change {\ttfamily N\+U\+M\+\_\+\+O\+U\+T\+P\+U\+TS} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define NUM\_OUTPUTS 1}}
+\end{DoxyCode}
+ Make sure to change this to {\ttfamily 10} if you switch back.
+\item Go to the top of {\ttfamily Neural\+Network.\+cpp} and change {\ttfamily O\+N\+E\+\_\+\+O\+U\+T\+P\+UT} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define ONE\_OUTPUT 1}}
+\end{DoxyCode}
+
+\end{DoxyEnumerate}\hypertarget{md__readme_autotoc_md9}{}\doxysection{Changing the activation function to $<$tt$>$tanh$<$/tt$>$}\label{md__readme_autotoc_md9}
+Simply go to the top of {\ttfamily Neural\+Network.\+cpp} and change {\ttfamily U\+S\+E\+\_\+\+T\+A\+NH} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define USE\_TANH 1}}
+\end{DoxyCode}
+ 

@@ -1,36 +1,48 @@
 #include "NeuralNetwork.h"
 #include <random>
-#include <cstdio>
 #include <algorithm>
 #include <exception>
-#include <cmath>
+#include <iostream>
+#include <iomanip>
 
 /* Should we reduce labels to ranges for one output? */
-#define ONE_OUTPUT 0
+#define ONE_OUTPUT 1
+
+/* Use tanh for activation function? */
+#define USE_TANH 0
+
 #if ONE_OUTPUT
 const static vector<double> ranges
 	{ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0 };
 #endif
 
-/* Use tanh for activation function? */
-#define USE_TANH 1
-
-typedef NeuralNetwork::Node Node;
-typedef NeuralNetwork::Layer Layer;
+using Node = NeuralNetwork::Node;
+using Layer = NeuralNetwork::Layer;
 
 unsigned Node::number_count = 0;
 
+constexpr double WEIGHT_LOWER_BOUND = -0.5;
+constexpr double WEIGHT_UPPER_BOUND = 0.5;
+
 Node::Node(Layer::size_type layerIndex) 
 	: layerIndex(layerIndex)
+	, activation(0.0)
+	, error(0.0)
+{
+	number = ++number_count;
+}
+
+Node::Node(double activation, Layer::size_type layerIndex)
+	: layerIndex(layerIndex)
+	, activation(activation)
+	, error(0.0)
 {
 	number = ++number_count;
 }
 
 NeuralNetwork::NeuralNetwork(int nInputs, int nHiddenLayers, int hiddenLayerSize, int nOutputs) 
-	: nInputs(nInputs)
-	, nHiddenLayers(nHiddenLayers)
-	, hiddenLayerSize(hiddenLayerSize)
-	, nOutputs(nOutputs)
+	: nOutputs(nOutputs)
+	, distribution(WEIGHT_LOWER_BOUND, WEIGHT_UPPER_BOUND)
 {
 	// network = { input, hidden1, hidden2, ..., hiddenN, output }
 
@@ -42,8 +54,9 @@ NeuralNetwork::NeuralNetwork(int nInputs, int nHiddenLayers, int hiddenLayerSize
 
 	for (int l = 0; l < nHiddenLayers; ++l) {
 		Layer hiddenLayer;
-		for (int n = 0; n < hiddenLayerSize; ++n)
+		for (int n = 0; n < hiddenLayerSize; ++n) {
 			hiddenLayer.push_back(Node(n));
+		}
 		network.push_back(hiddenLayer);
 	}
 
@@ -53,64 +66,107 @@ NeuralNetwork::NeuralNetwork(int nInputs, int nHiddenLayers, int hiddenLayerSize
 	}
 	network.push_back(outputLayer);
 
-	// output + hidden - input
 	for (vector<Layer>::size_type l = 1; l < network.size(); ++l) {
-		// layer = network[l]
 		for (Layer::size_type n = 0; n < network[l].size(); ++n) {
 			network[l][n].weights.resize(network[l-1].size());
 		}
 	}
 }
 
-NeuralNetwork::~NeuralNetwork() {
-}
+NeuralNetwork::~NeuralNetwork() = default;
 
 void NeuralNetwork::initialize
 		( double alpha
-		, time_t seed
+		, unsigned seed
 		, const vector<vector<double>> & exampleInputs
 		, const vector<double> & exampleOutputs
 		, const vector<vector<double>> & validationInputs
 		, const vector<double> & validationOutputs 
 		, unsigned epochs
-		, bool shouldInitWeights )
+		, bool shouldInitWeights // defaults to true
+		)
 {
 	this->alpha = alpha;
-	this->seed = seed;
 	this->exampleInputs = exampleInputs;
 	this->exampleOutputs = exampleOutputs;
 	this->validationInputs = validationInputs;
 	this->validationOutputs = validationOutputs;
 	this->epochs = epochs;
 
+	generator.seed(seed);
+
 	if (shouldInitWeights) {
 		initWeights();
 	}
 }
 
-void NeuralNetwork::showTrainingResult() {
+void NeuralNetwork::showTrainingResult(int precision) {
 	calcTotals();
-	printf("accuracy: %0.3lf, loss: %0.3lf\n", trainAccuracy, trainLoss);
+	cout << setprecision(precision)
+		 << "Training (epoch " << currentEpoch << "):" << endl
+		 << "\tAccuracy: " << trainAccuracy
+		 << "\tLoss: " << trainLoss
+		 << endl;
 }
 
-void NeuralNetwork::showValidationResult() {
+void NeuralNetwork::showValidationResult(int precision) {
 	calcTotals();
-	printf("accuracy: %0.3lf, loss: %0.3lf\n", valAccuracy, valLoss);
+	cout << setprecision(precision) 
+		 << "Training (epoch " << currentEpoch << "):" << endl
+		 << "\tAccuracy: " << valAccuracy
+		 << "\tLoss: " << valLoss
+		 << endl;
 }
 
-void NeuralNetwork::trainAndValidate() {
-	unsigned current_epoch = 0;
+void NeuralNetwork::trainAndValidate(int precision) {
+	currentEpoch = 0;
 
 	do {
-		++current_epoch;
+		++currentEpoch;
 		trainSingleEpoch();
 		validate();
 
 		calcTotals();
 
-	    printf("epoch: %u, trainAccuracy: %0.3lf, trainLoss: %0.3lf, valAccuracy: %0.3lf, valLoss: %0.3lf\n",
-	    	current_epoch, trainAccuracy, trainLoss, valAccuracy, valLoss);
-	} while (current_epoch < epochs);
+		cout << setprecision(precision)
+			 << "epoch: " << currentEpoch << ", "
+			 << "trainAccuracy: " << trainAccuracy << ", "
+			 << "trainLoss: " << trainLoss << ", "
+			 << "valAccuracy: " << valAccuracy << ", "
+			 << "valLoss: " << valLoss
+			 << endl;
+	} while (currentEpoch < epochs);
+}
+
+void NeuralNetwork::train() {
+	currentEpoch = 0;
+
+	do {
+		++currentEpoch;
+		trainSingleEpoch();
+	} while (currentEpoch < epochs);
+}
+
+void NeuralNetwork::trainSingleEpoch() {
+	totalTrainSamples = 0;
+	totalCorrectTrainSamples = 0;
+	totalTrainLoss = 0.0;
+
+	for (vector<vector<double>>::size_type i = 0; i < exampleInputs.size(); ++i) {
+		currentInput = &exampleInputs[i];
+		currentOutput = &exampleOutputs[i];
+
+		forwardPropagate();
+		totalTrainLoss += getLoss();
+
+		backwardPropagate();
+		updateWeights();
+
+		if (getPredictedLabel() == (int)*currentOutput) {
+			++totalCorrectTrainSamples;
+		}
+		++totalTrainSamples;
+	}
 }
 
 void NeuralNetwork::validate() {
@@ -132,41 +188,10 @@ void NeuralNetwork::validate() {
 	}
 }
 
-void NeuralNetwork::train() {
-	unsigned current_epoch = 0;
-
-	do {
-		++current_epoch;
-		trainSingleEpoch();
-	} while (current_epoch < epochs);
-}
-
-inline void NeuralNetwork::trainSingleEpoch() {
-	totalTrainSamples = 0;
-	totalCorrectTrainSamples = 0;
-	totalTrainLoss = 0.0;
-
-	for (vector<vector<double>>::size_type i = 0; i < exampleInputs.size(); ++i) {
-		currentInput = &exampleInputs[i];
-		currentOutput = &exampleOutputs[i];
-		// printf("epoch: %u  target: %0.1lf\n", current_epoch, exampleOutputs[currentExample]);
-
-		// do the thing
-		forwardPropagate();
-		totalTrainLoss += getLoss();
-
-		backwardPropagate();
-		updateWeights();
-
-		if (getPredictedLabel() == (int)*currentOutput) {
-			++totalCorrectTrainSamples;
-		}
-		++totalTrainSamples;
+double NeuralNetwork::in(vector<Layer>::iterator currLayerIterator, const Node & currLayerNode) {
+	if (currLayerNode.weights.empty()) {
+		return 0.0;
 	}
-}
-
-inline double NeuralNetwork::in(vector<Layer>::iterator currLayerIterator, const Node & currLayerNode) {
-	if (currLayerNode.weights.empty()) return 0.0;
 
 	double in = 0.0;
 	// j.weights[i] is the weight from node i to node j, so j.weights[i] = w_i_j
@@ -179,7 +204,7 @@ inline double NeuralNetwork::in(vector<Layer>::iterator currLayerIterator, const
 	return in;
 }
 
-inline void NeuralNetwork::forwardPropagate() {
+void NeuralNetwork::forwardPropagate() {
 	for (Node & n : inputLayer()) {
 		n.activation = currentInput->at(n.layerIndex);
 	}
@@ -191,7 +216,7 @@ inline void NeuralNetwork::forwardPropagate() {
 	}
 }
 
-inline void NeuralNetwork::backwardPropagate() {
+void NeuralNetwork::backwardPropagate() {
 	for (Node & node : outputLayer()) {
 		node.error = gprime(node.activation) * (y(node.layerIndex) - node.activation);
 	}
@@ -210,13 +235,12 @@ inline void NeuralNetwork::backwardPropagate() {
 				sumPrevError += prevLayerNode.weights[currLayerNode.layerIndex] * prevLayerNode.error;
 			}
 
-			// currLayerNode.error = gprime(g(in(layerIterator.base() - 1, currLayerNode))) * sumPrevError;
 			currLayerNode.error = gprime(currLayerNode.activation) * sumPrevError;
 		}
 	}
 }
 
-inline void NeuralNetwork::updateWeights() {
+void NeuralNetwork::updateWeights() {
 	for (auto layerIterator = hiddenLayerBegin(); layerIterator != network.end(); ++layerIterator) {
 		for (Node & currLayerNode : *layerIterator) {
 			for (const Node & prevLayerNode : *(layerIterator-1)) {
@@ -227,16 +251,16 @@ inline void NeuralNetwork::updateWeights() {
 }
 
 // calculate a random nonzero weight between -0.05 and 0.05
-inline double NeuralNetwork::randWeight() { 
-	int r;
+double NeuralNetwork::randWeight() { 
+	double r;
 	do {
-		r = (rand() % 200) - 99;
-	} while (r == 0);
-	return r * 5.0 / 1000;
+		r = distribution(generator);
+	} while (r == 0.0);
+	return r;
 }
 
 // assign random weights to nodes
-inline void NeuralNetwork::initWeights() {
+void NeuralNetwork::initWeights() {
 	// Node.weights[i] is the weight from node i in the previous layer to this Node
 	// therefore, network[0] (input layer) has weights.empty()
 
@@ -250,68 +274,73 @@ inline void NeuralNetwork::initWeights() {
 }
 
 #if USE_TANH
-inline double NeuralNetwork::g(double x) 
+double NeuralNetwork::g(double x) 
 	{ return (exp(x) - exp(-x))/(exp(x) + exp(-x)); }
-inline double NeuralNetwork::gprime(double y) { return 1 - (y*y); }
+double NeuralNetwork::gprime(double y) { return 1 - (y*y); }
 
 #else
-inline double NeuralNetwork::g(double x) { return 1.0 / (1.0 + exp(-x)); }
-inline double NeuralNetwork::gprime(double y) { return y * (1 - y); }
+double NeuralNetwork::g(double x) { return 1.0 / (1.0 + exp(-x)); }
+double NeuralNetwork::gprime(double y) { return y * (1 - y); }
 #endif
 
-inline void NeuralNetwork::printOutput() {
-	printf("\t\t{ ");
+void NeuralNetwork::printOutput(int precision) {
+	cout << "{ ";
 	for (const Node & node : outputLayer()) {
-		printf("%lu => %0.2lf, ", node.layerIndex, node.activation);
+		cout << setprecision(precision)
+			 << node.layerIndex << " => " << node.activation << ", ";
 	}
-	printf("}\n");
+	cout << " }" << endl;
 }
 
 #if ONE_OUTPUT
-inline double NeuralNetwork::y(int i) {
+double NeuralNetwork::y(int i) {
 	return (*currentOutput)/10.0;
 }
 #else
-inline double NeuralNetwork::y(int i) {
+double NeuralNetwork::y(int i) {
 	return double(i == (int)*currentOutput);
 }
 #endif
 
-inline Layer & NeuralNetwork::inputLayer() {
+Layer & NeuralNetwork::inputLayer() {
 	return *network.begin();
 }
 
-inline vector<Layer>::iterator NeuralNetwork::hiddenLayerBegin() {
+vector<Layer>::iterator NeuralNetwork::hiddenLayerBegin() {
 	return network.begin()+1;
 }
 
-inline vector<Layer>::iterator NeuralNetwork::hiddenLayerEnd() {
+vector<Layer>::iterator NeuralNetwork::hiddenLayerEnd() {
 	return network.end()-1;
 }
 
-inline Layer & NeuralNetwork::outputLayer() {
+Layer & NeuralNetwork::outputLayer() {
 	return *network.rbegin();
 }
 
 #if ONE_OUTPUT
-inline int NeuralNetwork::getPredictedLabel() {
-	if (nOutputs != 1) 
+int NeuralNetwork::getPredictedLabel() {
+	if (nOutputs != 1) {
 		throw logic_error("nOutputs != 1");
+	}
 
 	int result = 0;
 	for (double rangeMax : ranges) {
-		if ((*outputLayer().begin()).activation <= rangeMax) break;
+		if ((*outputLayer().begin()).activation <= rangeMax) {
+			break;
+		}
 		++result;
 	}
-	if (result > 9) 
+	if (result > 9) {
 		throw logic_error("invalid output result");
+	}
 
 	return result;
 }
 
 #else
-inline int NeuralNetwork::getPredictedLabel() {
-	Layer::iterator maxIter = max_element(outputLayer().begin(), outputLayer().end(), 
+int NeuralNetwork::getPredictedLabel() {
+	auto maxIter = max_element(outputLayer().begin(), outputLayer().end(), 
 		[](const Node & n1, const Node & n2) { 
 			return n1.activation < n2.activation; 
 		}
@@ -320,14 +349,14 @@ inline int NeuralNetwork::getPredictedLabel() {
 }
 #endif
 
-inline void NeuralNetwork::calcTotals() {
+void NeuralNetwork::calcTotals() {
     trainAccuracy = totalCorrectTrainSamples / (double)totalTrainSamples;
     trainLoss = totalTrainLoss / (double)totalTrainSamples;
     valAccuracy = totalCorrectValSamples / (double)totalValSamples;
     valLoss = totalValLoss / (double)totalValSamples;
 }
 
-inline double NeuralNetwork::getLoss() {
+double NeuralNetwork::getLoss() {
 	// SUM forall i OF (y_i - o_i) ^ 2
 	// y_i == desired output
 	// o_i == actual output
@@ -336,7 +365,7 @@ inline double NeuralNetwork::getLoss() {
 
 	for (const Node & node : outputLayer()) { 
 		yioi = y(node.layerIndex) - node.activation;
-		loss += yioi * yioi;
+		loss += 100.0 * yioi * yioi;
 	}
 
 	return loss;

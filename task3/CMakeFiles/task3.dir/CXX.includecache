@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/MNIST_reader.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/MNIST_reader.h
 math.h
 -
 fstream
@@ -16,41 +16,43 @@ iostream
 vector
 -
 
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/NeuralNetwork.cpp
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/NeuralNetwork.cpp
 NeuralNetwork.h
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/NeuralNetwork.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/NeuralNetwork.h
 random
--
-cstdio
 -
 algorithm
 -
 exception
 -
-cmath
+iostream
+-
+iomanip
 -
 
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/NeuralNetwork.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/NeuralNetwork.h
 vector
 -
+random
+-
 
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/main.cpp
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/main.cpp
 vector
 -
 iostream
 -
-ctime
+chrono
 -
 algorithm
 -
 util.h
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/util.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/util.h
 NeuralNetwork.h
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/NeuralNetwork.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/NeuralNetwork.h
 MNIST_reader.h
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/MNIST_reader.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/MNIST_reader.h
 
-/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/util.h
+/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/util.h
 vector
 -
 

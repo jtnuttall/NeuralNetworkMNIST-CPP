@@ -1,4 +1,4 @@
-# Install script for directory: /Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3
+# Install script for directory: /Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/jeremynuttall/Projects/NeuralNetworkMNIST-CPP/task3/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/jeremynuttall/Projects/csci360/Project 1/Submission/Code/task3/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
